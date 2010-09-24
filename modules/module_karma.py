@@ -9,7 +9,7 @@ def do_karma(bot, user, channel, karma):
 
     conn = sqlite3.connect('karma.db')
     c = conn.cursor()
-    t = (karma[0],)
+    t = (karma[0].lower(),)
     c.execute('select * from karma where word=?', t)
     res = c.fetchone()
 
