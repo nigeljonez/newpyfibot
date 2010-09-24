@@ -441,8 +441,9 @@ if __name__ == '__main__':
         # prevent internal confusion with channels
         chanlist = []
         for channel in settings['channels']:
-            if channel[0] not in '&#!+': channel = '#' + channel
-            chanlist.append(channel)
+            if channel[0] not in '&#!+^': channel = '#' + channel
+            # The following is to get around an annoying yaml/freenode thing w/ ## channels
+            chanlist.append(re.sub('\^', '#', channel))
 
 	port = 6667
 	try:
