@@ -15,11 +15,11 @@ def do_karma(bot, user, channel, karma):
 
     if res != None:
         u = k + res[2]
-        q = (u,karma[0],)
+        q = (u,karma[0].lower(),)
         c.execute('update karma set karma = ? where word=?', q)
     else:
         u = k
-        q = (karma[0],u,)
+        q = (karma[0].lower(),u,)
         c.execute('insert into karma (word, karma) VALUES (?,?)',q)
     
     conn.commit()
