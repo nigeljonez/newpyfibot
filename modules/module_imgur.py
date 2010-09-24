@@ -10,6 +10,7 @@ oauth_token = 'a0b19c8a764017234fedd83c095911d804c762172'
 oauth_token_secret = '9b2033e1d48be6aca606bacba2901300'
 
 def init(botconfig):
+    return
     global config
     global consumer_key, consumer_secret, oauth_token, oauth_token_secret
     global token, consumer
