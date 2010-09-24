@@ -2,7 +2,7 @@
 
 import urllib
 import json
-import oauth2 as oauth
+#import oauth2 as oauth
 
 consumer_key = 'cbcbcaf338bc7b430428dc4b64500e7004c761bbd'
 consumer_secret = '1e4f5bdff44ce1b2a8ec069d8a293991'
