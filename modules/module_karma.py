@@ -25,7 +25,7 @@ def do_karma(bot, user, channel, karma):
     conn.commit()
         
   
-    return bot.say(channel, "Karma for %s is now %s" % (karma[0], u))
+    return bot.say(channel, "%s now has %s karma" % (karma[0], u))
 
 
 def handle_privmsg(bot, user, reply, msg):
