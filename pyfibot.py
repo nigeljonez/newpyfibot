@@ -438,8 +438,19 @@ if __name__ == '__main__':
     factory = PyFiBotFactory(config)
     for network, settings in config['networks'].items():
         # use network specific nick or realname if one has been configured
-        nick = settings.get('nick', None) or config['nick']
-        realname = settings.get('realname', None) or config['realname']
+        if settings.has_key('nick'):
+            nick = settings['nick']
+        elif config.has_key('nick'):
+            nick = config['nick']
+        else:
+            nick = "pyfibot"
+
+        if settings.has_key('realname'):
+            realname = settings['realname']
+        elif config.has_key('realname'):
+            realname = config['realname']
+        else:
+            realname = "http://code.google.com/p/pyfibot/"
 
         # prevent internal confusion with channels
         chanlist = []
