@@ -39,3 +39,16 @@ def handle_privmsg(bot, user, reply, msg):
 
     return
 
+def command_karma(bot, user, channel, args):
+    """.karma <item>"""
+    item = args.split()[0]
+    conn = sqlite3.connect('karma.db')
+    c = conn.cursor()
+    t = (item.lower(),)
+    c.execute('select * from karma where word=?', t)
+    res = c.fetchone()
+
+    if res != None:
+        return bot.say(channel, "%s currently has %s karma" % (item, res[2]))
+    else:
+        return bot.say(channel, "%s has no karma" % (item))
