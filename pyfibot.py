@@ -169,10 +169,11 @@ class BotURLOpener(urllib.FancyURLopener):
         return ('', '')
 
 class Network:
-    def __init__(self, root, alias, address, nickname, channels = None):
+    def __init__(self, root, alias, address, nickname, realname, channels = None):
         self.alias = alias                         # network name
         self.address = address                     # server address
         self.nickname = nickname                   # nick to use
+        self.realname = realname                   # nick to use
         self.channels = channels or {}             # channels to join
 
         # create network specific save directory
@@ -268,8 +269,8 @@ class PyFiBotFactory(ThrottledClientFactory):
         p.factory = self
         return p
 
-    def createNetwork(self, address, alias, nickname, channels = None):
-        self.setNetwork(Network("data", alias, address, nickname, channels))
+    def createNetwork(self, address, alias, nickname, realname, channels = None):
+        self.setNetwork(Network("data", alias, address, nickname, realname, channels))
                 
     def setNetwork(self, net):
         nets = self.data['networks']
@@ -375,6 +376,7 @@ def create_example_conf():
     
     conf = """
     nick: botnick
+    realname: http://code.google.com/p/pyfibot/
 
     admins:
       - 'foo!bar@example.com'
@@ -435,8 +437,9 @@ if __name__ == '__main__':
 
     factory = PyFiBotFactory(config)
     for network, settings in config['networks'].items():
-        # use network specific nick if one has been configured
+        # use network specific nick or realname if one has been configured
         nick = settings.get('nick', None) or config['nick']
+        realname = settings.get('realname', None) or config['realname']
 
         # prevent internal confusion with channels
         chanlist = []
@@ -450,7 +453,7 @@ if __name__ == '__main__':
 	    port = int(settings.get('port'))
 	except:
 	    pass
-        factory.createNetwork((settings['server'], port), network, nick, chanlist)
+        factory.createNetwork((settings['server'], port), network, nick, realname, chanlist)
         reactor.connectTCP(settings['server'], port, factory)
         
     reactor.run()
