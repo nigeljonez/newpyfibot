@@ -335,6 +335,7 @@ class PyFiBotFactory(ThrottledClientFactory):
         g['getUrl'] = self.getUrl
         g['getNick'] = self.getNick
         g['isAdmin'] = self.isAdmin
+        g['isIgnored'] = self.isIgnored
         return g
 
     def getUrl(self, url, nocache=False):
@@ -371,6 +372,17 @@ class PyFiBotFactory(ThrottledClientFactory):
         
         return False
 
+    def isIgnored(self, user):
+        """Check if an user is ignored
+
+        @return: True or False"""
+
+        for pattern in self.config['ignores']:
+            if fnmatch.fnmatch(user, pattern):
+                return True
+
+        return False
+
 def create_example_conf():
     """Create an example configuration file"""
     
@@ -381,6 +393,9 @@ def create_example_conf():
     admins:
       - 'foo!bar@example.com'
     
+    ignores:
+      - 'bar!foo@example.com'
+        
     networks:
       ircnet:
         server: irc.ircnet.com
