@@ -29,14 +29,13 @@ class Nuggets():
             if re.search('\.\.\.', temp): self.nugget_list.append(re.sub('\.\.\.', '', temp))
 
     def getSentence(self):
-        return self.question + self.nugget_list[random.randint(0, len(self.nugget_list))]
-
+        return self.question + self.nugget_list[random.randint(0, len(self.nugget_list) - 1)]
 
 class NuggetsEn(Nuggets):
     def __init__(self, archive_num):
         self.question = "Did you know, "
-        #archive_max checked 13-8-2009
-        self.archive_max = 246
+        #archive_max checked 26-09-2010 http://en.wikipedia.org/wiki/Wikipedia:Recent_additions_1
+        self.archive_max = 255
         self.archive_num = archive_num
         if self.archive_num > self.archive_max: self.archive_num = random.randint(1, self.archive_max)
         self.url = "http://en.wikipedia.org/wiki/Wikipedia:Recent_additions_" + str(self.archive_num)
