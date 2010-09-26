@@ -277,6 +277,10 @@ class PyFiBot(irc.IRCClient, CoreCommands):
         @param msg: The actual message
         """
 
+        if self.factory.isIgnored(user):
+            return
+
+
         channel = channel.lower()
 
         lmsg = msg.lower()
@@ -341,6 +345,10 @@ class PyFiBot(irc.IRCClient, CoreCommands):
             cmnd, args = cmnd.split(" ", 1)
         except ValueError:
             args = ""
+
+        if self.factory.isIgnored(user):
+            log.info("command %s called by ignored user %s" % (cmnd, user))
+            return
 
         # core commands
         method = getattr(self, "command_%s" % cmnd, None)

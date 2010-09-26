@@ -31,7 +31,7 @@ def do_karma(bot, user, channel, karma):
 def handle_privmsg(bot, user, reply, msg):
     """Grab karma changes from the messages and handle them"""
 
-    m = re.findall('([a-zA-Z0-9.-_]*)(\+\+|\-\-)', msg)
+    m = re.findall('([a-zA-Z0-9.]*)(\+\+|\-\-)', msg)
     if len(m) == 0: return None
 
     for k in m:
@@ -52,3 +52,14 @@ def command_karma(bot, user, channel, args):
         return bot.say(channel, "%s currently has %s karma" % (item, res[2]))
     else:
         return bot.say(channel, "%s has no karma" % (item))
+
+def command_topkarma(bot, user, channel, args):
+    """.topkarma"""
+    conn = sqlite3.connect('karma.db')
+    c = conn.cursor()
+    c.execute('select * from karma order by karma desc limit 5')
+
+    for row in c:
+        bot.say(channel, "Top 5: %s has %s karma" % (str(row[1]), row[2]))
+
+    return
