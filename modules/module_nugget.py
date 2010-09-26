@@ -79,8 +79,8 @@ def command_nugget(bot, user, channel, args):
         elif args.lower() == "fi":
             nugget = NuggetsFi(10000)
         else:
-            nugget = NuggetsFi(10000)
+            nugget = NuggetsEn(10000)
     else:
-        nugget = NuggetsFi(10000)
+        nugget = NuggetsEn(10000)
         
     return bot.say(channel, nugget.getSentence())
