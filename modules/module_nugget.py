@@ -50,7 +50,7 @@ class NuggetsEn(Nuggets):
                 ugly_nugget_list.append(nugget)
 
         self.cleanNuggets(ugly_nugget_list)
-                
+
 class NuggetsFi(Nuggets):
     def __init__(self, archive_num):
         self.question = "Tiesitkö, että "
@@ -70,16 +70,33 @@ class NuggetsFi(Nuggets):
 
         self.cleanNuggets(ugly_nugget_list)
 
+class NuggetsNl(NuggetsFi):
+    def __init__(self, archive_num):
+        self.question = "Wist je dat, "
+        #archive_max checked 26-09-2010 http://nl.wikipedia.org/wiki/Wikipedia:Wist_je_dat
+        self.archive_max = 52
+        self.archive_num = archive_num
+        if self.archive_num > self.archive_max: self.archive_num = random.randint(1, self.archive_max)
+        self.url = "http://nl.wikipedia.org/wiki/Sjabloon:Hoofdpagina_-_wist_je_dat_" + str(self.archive_num)
+        Nuggets.__init__(self)
+
 def command_nugget(bot, user, channel, args):
-    """Tells nugget from Wikipedia. Avaible Languages: fi, en Usage: .nugget [lang]"""
+    """Tells nugget from Wikipedia. Avaible Languages: fi, en, nl Usage: .nugget [lang]"""
     if args:
         if args.lower() == "en":
             nugget = NuggetsEn(10000)
         elif args.lower() == "fi":
             nugget = NuggetsFi(10000)
+        elif args.lower() == "nl":
+            nugget = NuggetsNl(10000)
         else:
-            nugget = NuggetsEn(10000)
+            nugget = None
     else:
         nugget = NuggetsEn(10000)
-        
-    return bot.say(channel, nugget.getSentence())
+
+    if nugget != None:
+        msg = nugget.getSentence()
+    else:
+        msg = "Sorry, I don't speak the language '%s'" % str(args)
+
+    return bot.say(channel, msg)
