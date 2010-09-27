@@ -377,9 +377,10 @@ class PyFiBotFactory(ThrottledClientFactory):
 
         @return: True or False"""
 
-        for pattern in self.config['ignores']:
-            if fnmatch.fnmatch(user, pattern):
-                return True
+        if self.config.has_key('ignores'):
+            for pattern in self.config['ignores']:
+                if fnmatch.fnmatch(user, pattern):
+                    return True
 
         return False
 
