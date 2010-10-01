@@ -258,7 +258,11 @@ class PyFiBotFactory(ThrottledClientFactory):
 
         # do we know how to connect to the given address?
         for n in self.data['networks'].values():
-            if n.address == address:
+            # a server can have multiple DNS CNAME records (like irc.freenode.net)
+            aliases = socket.getaddrinfo(n.address[0], n.address[1], socket.AF_INET, socket.SOCK_STREAM)
+            # alias is a tupel: (family, socktype, proto, canonname, sockaddr)
+            aliases = [a[4] for a in addresses]
+            if address in aliases:
                 break
         else:
             log.info("unknown network address: " + repr(address))
