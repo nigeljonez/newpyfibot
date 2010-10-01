@@ -31,7 +31,18 @@ def do_karma(bot, user, channel, karma):
 def handle_privmsg(bot, user, reply, msg):
     """Grab karma changes from the messages and handle them"""
 
-    m = re.findall('([a-zA-Z0-9.]*)(\+\+|\-\-)', msg)
+    m = re.findall('([a-zA-Z0-9.]+)(\+\+|\-\-)', msg)
+    if len(m) == 0: return None
+
+    for k in m:
+        do_karma(bot, user, reply, k)
+
+    return
+
+def handle_action(bot, user, reply, msg):
+    """Grab karma changes from the messages and handle them"""
+
+    m = re.findall('([a-zA-Z0-9.]+)(\+\+|\-\-)', msg)
     if len(m) == 0: return None
 
     for k in m:

@@ -13,7 +13,11 @@ def command_version(bot, user, channel, args):
         return bot.say(channel, 'Version unknown')
 
     gitrepo = git.Repo(".")
-    githead = gitrepo.iter_commits().next()
+    if git.__version__ > '0.2.0':
+        githead = gitrepo.iter_commits().next()
+        date = time.ctime(githead.committed_date)
+    else:
+        githead = gitrepo.commits()[0]
+        date = time.asctime(githead.committed_date)
     author = githead.author.name
-    date = time.ctime(githead.committed_date)
     bot.say(channel, 'Currently running git commit %s (%s @ %s)' % (str(githead)[:8], author, date))
