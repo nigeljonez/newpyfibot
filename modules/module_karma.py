@@ -32,7 +32,7 @@ def handle_privmsg(bot, user, reply, msg):
     """Grab karma changes from the messages and handle them"""
 
     m = re.findall('([a-zA-Z0-9.]+)(\+\+|\-\-)', msg)
-    if len(m) == 0: return None
+    if len(m) == 0 or len(m) >= 5: return None
 
     for k in m:
         do_karma(bot, user, reply, k)
