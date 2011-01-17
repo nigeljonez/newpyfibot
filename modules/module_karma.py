@@ -64,6 +64,10 @@ def command_karma(bot, user, channel, args):
     else:
         return bot.say(channel, "%s has no karma" % (item))
 
+""" By request of eric, .rank = .karma """
+def command_rank(bot, user, channel, args):
+    return command_karma(bot, user, channel, args)
+
 def command_topkarma(bot, user, channel, args):
     """.topkarma"""
     conn = sqlite3.connect('karma.db')
