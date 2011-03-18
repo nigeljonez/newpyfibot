@@ -25,13 +25,13 @@ def do_karma(bot, user, channel, karma):
     conn.commit()
         
   
-    return bot.say(channel, "%s now has %s karma" % (karma[0], u))
+    return bot.say(channel, "%s now has %s karma"  % (karma[0].encode('utf-8', 'replace'), u))
 
 
 def handle_privmsg(bot, user, reply, msg):
     """Grab karma changes from the messages and handle them"""
 
-    m = re.findall('([a-zA-Z0-9._]+)(\+\+|\-\-)', msg)
+    m = re.findall('((?u)[\w.`\']+)(\+\+|\-\-)', msg.decode('utf-8'))
     if len(m) == 0 or len(m) >= 5: return None
 
     for k in m:
@@ -42,8 +42,8 @@ def handle_privmsg(bot, user, reply, msg):
 def handle_action(bot, user, reply, msg):
     """Grab karma changes from the messages and handle them"""
 
-    m = re.findall('([a-zA-Z0-9.]+)(\+\+|\-\-)', msg)
-    if len(m) == 0: return None
+    m = re.findall('((?u)[\w.`\']+)(\+\+|\-\-)', msg.decode('utf-8'))    
+    if len(m) == 0 or len(m) >= 5: return None
 
     for k in m:
         do_karma(bot, user, reply, k)
