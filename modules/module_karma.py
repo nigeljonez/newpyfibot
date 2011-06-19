@@ -16,7 +16,8 @@ def do_karma(bot, user, channel, karma):
     if res != None:
         u = k + res[2]
         if u == 0:
-            c.execute('delete from karma where karma = 0')
+            c.execute('delete from karma where word=?', t)
+            conn.commit()
             return bot.say(channel, "%s no longer has karma and is garbage collected"  % (karma[0].encode('utf-8', 'replace')))
         else:
             q = (u,karma[0].lower(),)
