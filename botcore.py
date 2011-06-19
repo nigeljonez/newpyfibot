@@ -258,7 +258,8 @@ class PyFiBot(irc.IRCClient, CoreCommands):
         
         for m in msg:
             if cont: m = "..."+m
-            self.msg(channel, m, length)
+            if length == None: self.msg(channel, m)
+            else: self.msg(channel, m, length)
             cont = True
 
         return ('botcore.say', channel, message)
