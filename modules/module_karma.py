@@ -73,6 +73,36 @@ def command_karma(bot, user, channel, args):
 def command_rank(bot, user, channel, args):
     return command_karma(bot, user, channel, args)
 
+def command_srank(bot, user, channel, args):
+    """ .srank <substring> """
+    item = args.split()[0].decode("utf-8")
+
+    conn = sqlite3.connect('karma.db')
+    c = conn.cursor()
+    t = item.lower()
+    c.execute('select word,karma from karma where word like ? order by karma asc', ("%" + item + "%",))
+    res = c.fetchall()
+    if not len(res):
+        return bot.say(channel, unicode("No matches for '*%s*'" % item).encode("utf-8"))
+    max_len = 150
+    ranks = []
+
+    while len(res):
+      new_rank = "%s (%d)" % res.pop()
+      if len(", ".join(ranks)) + len(new_rank) < max_len:
+        ranks.append(new_rank)
+      else:
+        break
+      
+    message = ", ".join(ranks)
+
+    if len(res):
+      message = message + " (%d omitted)" % len(res)
+
+    return bot.say(channel, message.encode("utf-8"))
+
+
+
 def command_topkarma(bot, user, channel, args):
     """.topkarma"""
     conn = sqlite3.connect('karma.db')
