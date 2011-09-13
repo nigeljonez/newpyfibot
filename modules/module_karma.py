@@ -53,7 +53,7 @@ def do_karma(bot, user, channel, karma):
 def handle_privmsg(bot, user, reply, msg):
     """Grab karma changes from the messages and handle them"""
 
-    m = re.findall('((?u)[\w.`\']+)(\+\+|\-\-)', msg.decode('utf-8'))
+    m = re.findall('((?u)[\w.`\-\']+)(\+\+|\-\-)', msg.decode('utf-8'))
     #Now we have spam prevention, this is disabled -- Nigel
     #if len(m) == 0 or len(m) >= 5: return None
 
@@ -65,7 +65,7 @@ def handle_privmsg(bot, user, reply, msg):
 def handle_action(bot, user, reply, msg):
     """Grab karma changes from the messages and handle them"""
 
-    m = re.findall('((?u)[\w.`\']+)(\+\+|\-\-)', msg.decode('utf-8'))    
+    m = re.findall('((?u)[\w.`\-\']+)(\+\+|\-\-)', msg.decode('utf-8'))    
     if len(m) == 0 or len(m) >= 5: return None
 
     for k in m:
@@ -111,7 +111,7 @@ def command_srank(bot, user, channel, args):
         ranks.append(new_rank)
       else:
         break
-      
+
     message = ", ".join(ranks)
 
     if len(res):
