@@ -1,5 +1,6 @@
 import re
 import sqlite3
+import time
 
 def do_karma(bot, user, channel, karma):
     if karma[1] == '++':
@@ -10,6 +11,23 @@ def do_karma(bot, user, channel, karma):
     conn = sqlite3.connect('karma.db')
     c = conn.cursor()
     t = (karma[0].lower(),)
+
+    # Karma spam check
+    # SILENTLY ignore if user has modified this karma in the last 5 mins
+    c.execute('select * from karmalog where word=? and user=?', (karma[0].lower(), user,))
+    res = c.fetchone()
+    curtime = int(time.time())
+
+    if res != None:
+        lasttime = res[3]
+        if (lasttime + 300) > curtime:
+            return
+        else:
+            c.execute('update karmalog set lasttime = ? where word=? and user=?', (curtime, karma[0].lower(), user,))
+    else:
+        c.execute('insert into karmalog (word, user, lasttime) VALUES (?,?,?)', (karma[0].lower(), user, curtime,))
+
+
     c.execute('select * from karma where word=?', t)
     res = c.fetchone()
 
@@ -26,10 +44,9 @@ def do_karma(bot, user, channel, karma):
         u = k
         q = (karma[0].lower(),u,)
         c.execute('insert into karma (word, karma) VALUES (?,?)',q)
-    
+
     conn.commit()
-        
-  
+
     return bot.say(channel, "%s now has %s karma"  % (karma[0].encode('utf-8', 'replace'), u))
 
 
@@ -37,7 +54,8 @@ def handle_privmsg(bot, user, reply, msg):
     """Grab karma changes from the messages and handle them"""
 
     m = re.findall('((?u)[\w.`\']+)(\+\+|\-\-)', msg.decode('utf-8'))
-    if len(m) == 0 or len(m) >= 5: return None
+    #Now we have spam prevention, this is disabled -- Nigel
+    #if len(m) == 0 or len(m) >= 5: return None
 
     for k in m:
         do_karma(bot, user, reply, k)
