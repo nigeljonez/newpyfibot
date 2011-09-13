@@ -75,7 +75,7 @@ def handle_action(bot, user, reply, msg):
 
 def command_karma(bot, user, channel, args):
     """.karma <item>"""
-    item = args.split()[0]
+    item = args.split()[0].decode('utf-8')
     conn = sqlite3.connect('karma.db')
     c = conn.cursor()
     t = (item.lower(),)
@@ -83,9 +83,9 @@ def command_karma(bot, user, channel, args):
     res = c.fetchone()
 
     if res != None:
-        return bot.say(channel, "%s currently has %s karma" % (item, res[2]))
+        return bot.say(channel, unicode("%s currently has %s karma" % (item, res[2])).encode('utf-8'))
     else:
-        return bot.say(channel, "%s has no karma" % (item))
+        return bot.say(channel, unicode("%s has no karma" % (item)).encode('utf-8'))
 
 """ By request of eric, .rank = .karma """
 def command_rank(bot, user, channel, args):
