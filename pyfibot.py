@@ -393,7 +393,8 @@ def create_example_conf():
     
     conf = """
     nick: botnick
-    realname: http://code.google.com/p/pyfibot/
+    realname: https://github.com/nigeljonez/newpyfibot
+    bindip: 0.0.0.0
 
     admins:
       - 'foo!bar@example.com'
@@ -455,6 +456,11 @@ if __name__ == '__main__':
             print 'No config file found, there is an example config (bot.config.example) for you. Please edit it and rename to bot.config or delete it to generate a new example config.'
         sys.exit(1)
 
+    if config.has_key('bindip'):
+        bindip = config['bindip']
+    else:
+        bindip = "0.0.0.0"
+
     factory = PyFiBotFactory(config)
     for network, settings in config['networks'].items():
         # use network specific nick or realname if one has been configured
@@ -485,6 +491,6 @@ if __name__ == '__main__':
 	except:
 	    pass
         factory.createNetwork((settings['server'], port), network, nick, realname, chanlist)
-        reactor.connectTCP(settings['server'], port, factory)
+        reactor.connectTCP(settings['server'], port, factory, bindAddress=(bindip, 0))
         
     reactor.run()
