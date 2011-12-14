@@ -181,6 +181,7 @@ class PyFiBot(irc.IRCClient, CoreCommands):
     hasQuit = False
 
     CMDCHAR = "."
+    IGNORECHAR = "^"
 
     # Rolling ping time average
     pingAve = 0.0
@@ -309,14 +310,15 @@ class PyFiBot(irc.IRCClient, CoreCommands):
             cmnd = msg[len(self.CMDCHAR):]
             self._command(user, reply, cmnd)
 
-        # run privmsg handlers
-        self._runhandler("privmsg", user, reply, msg)
+        if not msg.startswith(self.IGNORECHAR):
+            # run privmsg handlers
+            self._runhandler("privmsg", user, reply, msg)
 
-        # run URL handlers
-        urls = pyfiurl.grab(msg)
-        if urls:
-            for url in urls:
-                self._runhandler("url", user, reply, url, msg)
+            # run URL handlers
+            urls = pyfiurl.grab(msg)
+            if urls:
+                for url in urls:
+                    self._runhandler("url", user, reply, url, msg)
                                                         
     def _runhandler(self, handler, *args, **kwargs):
         """Run a handler for an event"""
