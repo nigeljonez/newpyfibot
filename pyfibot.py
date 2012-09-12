@@ -169,10 +169,11 @@ class BotURLOpener(urllib.FancyURLopener):
         return ('', '')
 
 class Network:
-    def __init__(self, root, alias, address, nickname, realname, channels = None):
+    def __init__(self, root, alias, address, nickname, password, realname, channels = None):
         self.alias = alias                         # network name
         self.address = address                     # server address
         self.nickname = nickname                   # nick to use
+        self.password = password
         self.realname = realname                   # nick to use
         self.channels = channels or {}             # channels to join
 
@@ -273,8 +274,8 @@ class PyFiBotFactory(ThrottledClientFactory):
         p.factory = self
         return p
 
-    def createNetwork(self, address, alias, nickname, realname, channels = None):
-        self.setNetwork(Network("data", alias, address, nickname, realname, channels))
+    def createNetwork(self, address, alias, nickname, password, realname, channels = None):
+        self.setNetwork(Network("data", alias, address, nickname, password, realname, channels))
                 
     def setNetwork(self, net):
         nets = self.data['networks']
@@ -471,6 +472,11 @@ if __name__ == '__main__':
         else:
             nick = "pyfibot"
 
+        if settings.has_key('password'):
+            password = settings['password']
+        else:
+            password = None
+
         if settings.has_key('realname'):
             realname = settings['realname']
         elif config.has_key('realname'):
@@ -490,7 +496,7 @@ if __name__ == '__main__':
 	    port = int(settings.get('port'))
 	except:
 	    pass
-        factory.createNetwork((settings['server'], port), network, nick, realname, chanlist)
+        factory.createNetwork((settings['server'], port), network, nick, password, realname, chanlist)
         reactor.connectTCP(settings['server'], port, factory, bindAddress=(bindip, 0))
         
     reactor.run()

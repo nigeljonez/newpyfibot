@@ -190,6 +190,7 @@ class PyFiBot(irc.IRCClient, CoreCommands):
         self.network = network
         self.nickname = self.network.nickname
         self.realname = self.network.realname
+        self.password = self.network.password
 
         # text wrapper to clip overly long answers
         self.tw = textwrap.TextWrapper(width=400, break_long_words=True)
